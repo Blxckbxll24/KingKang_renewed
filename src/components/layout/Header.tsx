@@ -10,24 +10,24 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         {/* Logo */}
         <a href="/" className="flex items-center gap-2">
-          <img
-            src="/logoking.png"
-            alt="KingKang Logo"
-            className="h-10 w-auto"
-          />
-          <span className="text-2xl font-bold text-white tracking-wide">
-            KingKang
-          </span>
+          <img src="/logoking.png" alt="KingKang Logo" className="h-10 w-auto" />
+          <span className="text-2xl font-bold text-white tracking-wide">KingKang</span>
         </a>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex gap-6 text-white text-sm font-medium">
+        <nav className="hidden md:flex gap-6 text-white text-sm font-medium items-center">
           <a href="/productos" className="hover:text-orange-300 transition">Productos</a>
           <a href="/nosotros" className="hover:text-orange-300 transition">Nosotros</a>
           <a href="/contacto" className="hover:text-orange-300 transition">Contacto</a>
-          <a href="/login" className="hover:text-orange-300 transition">Iniciar sesión</a>
-          <a href="/carrito" className="hover:text-orange-300 transition">Carrito</a>
-          <a href="/perfil" className="hover:text-orange-300 transition">Mi Perfil</a>
+          <a href="/carrito" className="hover:opacity-80 transition" aria-label="Carrito">
+            <img src="/Carrito.png" alt="Carrito" className="h-6 w-auto" />
+          </a>
+          <a
+            href="/login"
+            className="bg-white text-red-600 px-4 py-2 rounded-full font-semibold shadow hover:bg-orange-300 hover:text-white transition-colors duration-300"
+          >
+            Iniciar sesión
+          </a>
         </nav>
 
         {/* Mobile Menu Toggle */}
