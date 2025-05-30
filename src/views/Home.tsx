@@ -10,19 +10,36 @@ export default function Home() {
       <main className="flex-grow space-y-24">
 
         {/* Sección Hero */}
-        <section
-          className="relative bg-[url('/HeroCat.jpg')] bg-cover bg-center text-white px-6 mt-12 max-w-7xl mx-auto rounded-3xl shadow-xl text-center min-h-[400px] flex items-center overflow-hidden"
-        >
-          <div className="absolute inset-0 bg-black/15 backdrop-blur-xxs rounded-3xl"></div>
-          <div className="relative z-10 max-w-4xl mx-auto p-6">
-            <h1 className="text-5xl font-extrabold mb-4">
-              Bienvenido a <span className="text-white">KingKang</span>
-            </h1>
-            <p className="text-xl">
-              Tu tienda confiable para productos innovadores, funcionales y con estilo.
-            </p>
-          </div>
-        </section>
+       <section
+  className="relative w-full min-h-screen text-white px-6 shadow-xl text-center flex items-center overflow-hidden"
+>
+  {/* Video de fondo */}
+  <video
+    className="absolute inset-0 w-full h-full object-cover blur-[1px]"
+    src="/HotDog.mp4"
+    autoPlay
+    muted
+    loop
+    playsInline
+  ></video>
+
+  {/* Capa oscura encima del video */}
+  <div className="absolute inset-0 bg-black/50 backdrop-blur-[3px]"></div>
+
+  {/* Contenido principal */}
+  <div className="relative z-10 max-w-4xl mx-auto p-6">
+    <h1 className="text-7xl font-extrabold mb-6">
+      Bienvenido a <span className="text-white">KingKang</span>
+    </h1>
+    <p className="text-2xl">
+      Tu tienda confiable para productos innovadores, funcionales y con estilo.
+    </p>
+  </div>
+</section>
+
+
+
+
 
         {/* Sección Productos Destacados */}
         <section className="max-w-6xl mx-auto px-4">
