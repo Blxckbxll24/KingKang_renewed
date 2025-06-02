@@ -15,7 +15,7 @@ export default function Home() {
 >
   {/* Video de fondo */}
   <video
-    className="absolute inset-0 w-full h-full object-cover blur-[1px]"
+    className="absolute inset-0 w-full h-full object-fill blur-[1px]"
     src="/HotDog.mp4"
     autoPlay
     muted

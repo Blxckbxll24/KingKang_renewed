@@ -35,37 +35,37 @@ export default function Sidebar() {
   const menuItems = [
     {
       label: "Dashboard",
-      path: "/admin/dashboard",
+      path: "/dashboard",
       icon: <ChartNoAxesCombined className="w-5 h-5" aria-hidden="true" />,
     },
     {
       label: "Categorías",
-      path: "/admin/categorias",
+      path: "/categorias",
       icon: <Layers className="w-5 h-5" aria-hidden="true" />,
     },
     {
       label: "Productos",
-      path: "/admin/productos",
+      path: "/productos",
       icon: <Package className="w-5 h-5" aria-hidden="true" />,
     },
     {
       label: "Roles",
-      path: "/admin/roles",
+      path: "/roles",
       icon: <UserLock className="w-5 h-5" aria-hidden="true" />,
     },
     {
       label: "Usuarios",
-      path: "/admin/usuarios",
+      path: "/usuarios",
       icon: <Users className="w-5 h-5" aria-hidden="true" />,
     },
     {
       label: "Mensajes",
-      path: "/admin/mensajes",
+      path: "/mensajes",
       icon: <MessageSquareMore className="w-5 h-5" aria-hidden="true" />,
     },
     {
       label: "Órdenes",
-      path: "/admin/ordenes",
+      path: "/ordenes",
       icon: <ClipboardList className="w-5 h-5" aria-hidden="true" />,
     },
   ];
