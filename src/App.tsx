@@ -11,6 +11,9 @@ import Productos from './views/Productos';
 
 //Imports admin
 import Dashboard from './views/admin/Dashboard';
+import Users from './views/admin/Users';
+import Roles from './views/admin/Roles';
+import Categories from './views/admin/Categories';
 
 
 function App() {
@@ -28,6 +31,9 @@ function App() {
 
         {/* Rutas de admin */}
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/usuarios" element={<Users />} />
+        <Route path="/roles" element={<Roles />} />
+        <Route path="/categorias" element={<Categories />} />
 
       </Routes>
     </Router>

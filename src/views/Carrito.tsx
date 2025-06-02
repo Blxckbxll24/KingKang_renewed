@@ -112,7 +112,7 @@ export default function Carrito() {
               <span>${(total + 99).toFixed(2)} MXN</span>
             </div>
 
-            <button className="mt-6 w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-full font-semibold transition">
+            <button className="mt-6 w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-xl font-semibold transition">
               Continuar al pago
             </button>
           </div>
