@@ -14,6 +14,9 @@ import Dashboard from './views/admin/Dashboard';
 import Users from './views/admin/Users';
 import Roles from './views/admin/Roles';
 import Categories from './views/admin/Categories';
+import Products from './views/admin/Products';
+import Contactos from './views/admin/Contactos';
+import Orders from './views/admin/Orders';
 
 
 function App() {
@@ -34,6 +37,9 @@ function App() {
         <Route path="/usuarios" element={<Users />} />
         <Route path="/roles" element={<Roles />} />
         <Route path="/categorias" element={<Categories />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/mensajes" element={<Contactos />} />
+        <Route path="/ordenes" element={<Orders />} />
 
       </Routes>
     </Router>

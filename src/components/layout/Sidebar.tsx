@@ -45,7 +45,7 @@ export default function Sidebar() {
     },
     {
       label: "Productos",
-      path: "/productos",
+      path: "/products",
       icon: <Package className="w-5 h-5" aria-hidden="true" />,
     },
     {
