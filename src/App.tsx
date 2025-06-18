@@ -8,6 +8,7 @@ import Login from './views/auth/Login';
 import Registro from './views/auth/Registro';
 import Carrito from './views/Carrito';
 import Productos from './views/Productos';
+import ProductosPorCategoria from './views/ProductosPorCategoria'; // 👈 Nuevo import
 
 //Imports admin
 import Dashboard from './views/admin/Dashboard';
@@ -17,7 +18,6 @@ import Categories from './views/admin/Categories';
 import Products from './views/admin/Products';
 import Contactos from './views/admin/Contactos';
 import Orders from './views/admin/Orders';
-
 
 function App() {
   return (
@@ -31,6 +31,7 @@ function App() {
         <Route path="/registro" element={<Registro />} />
         <Route path="/carrito" element={<Carrito />} />
         <Route path="/productos" element={<Productos />} />
+        <Route path="/productos/:categoria" element={<ProductosPorCategoria />} /> {/* 👈 Nueva ruta */}
 
         {/* Rutas de admin */}
         <Route path="/dashboard" element={<Dashboard />} />
@@ -40,7 +41,6 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/mensajes" element={<Contactos />} />
         <Route path="/ordenes" element={<Orders />} />
-
       </Routes>
     </Router>
   );
