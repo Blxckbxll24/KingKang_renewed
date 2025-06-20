@@ -1,4 +1,8 @@
+// src/views/admin/Dashboard.tsx
+import { useEffect, useState } from "react";
 import Sidebar from "../../components/layout/Sidebar";
+import { fetchLogs } from "../../services/logsService";
+import LogsTable from "../../components/admin/logs/LogsTable";
 import { Users, Package, ClipboardList } from "lucide-react";
 import {
   LineChart,
@@ -10,7 +14,23 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+interface Log {
+  id: number;
+  userId: number;
+  action: string;
+  message: string;
+  createdAt: string;
+}
+
 export default function Dashboard() {
+  const [logs, setLogs] = useState<Log[]>([]);
+
+  useEffect(() => {
+    fetchLogs()
+      .then((data) => setLogs(data))
+      .catch((error) => console.error("Error al obtener logs:", error));
+  }, []);
+
   const stats = [
     {
       title: "Usuarios",
@@ -41,20 +61,14 @@ export default function Dashboard() {
     { mes: "Jun", ordenes: 35 },
   ];
 
-  const logs = [
-    "✅ Usuario Juan Pérez registrado",
-    "🛒 Nueva orden creada: #1234",
-    "✏️ Producto 'Camisa Roja' actualizado",
-    "🔒 Admin inició sesión",
-    "📦 Orden #1229 enviada",
-  ];
-
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
 
       <main className="flex-1 p-6 overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-6">Bienvenido al panel de administración</h2>
+        <h2 className="text-2xl font-bold mb-6">
+          Bienvenido al panel de administración
+        </h2>
 
         {/* Contadores */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -77,7 +91,12 @@ export default function Dashboard() {
           <h3 className="text-lg font-semibold mb-4">Órdenes por mes</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={ordersData}>
-              <Line type="monotone" dataKey="ordenes" stroke="#ef4444" strokeWidth={3} />
+              <Line
+                type="monotone"
+                dataKey="ordenes"
+                stroke="#ef4444"
+                strokeWidth={3}
+              />
               <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
               <XAxis dataKey="mes" />
               <YAxis />
@@ -87,14 +106,7 @@ export default function Dashboard() {
         </div>
 
         {/* Logs */}
-        <div className="bg-white p-6 rounded-xl shadow">
-          <h3 className="text-lg font-semibold mb-4">Actividad reciente</h3>
-          <ul className="list-disc pl-5 space-y-2 text-gray-700">
-            {logs.map((log, i) => (
-              <li key={i}>{log}</li>
-            ))}
-          </ul>
-        </div>
+        <LogsTable logs={logs} />
       </main>
     </div>
   );
