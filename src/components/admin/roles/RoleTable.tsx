@@ -17,7 +17,6 @@ export default function RoleTable({ roles, onEdit, onDelete }: RoleTableProps) {
       <table className="w-full text-left border-collapse min-w-[600px]">
         <thead className="bg-blue-100 text-blue-800">
           <tr className="border-b">
-            <th className="p-3">ID</th>
             <th className="p-3">Nombre del rol</th>
             <th className="p-3 text-center">Acciones</th>
           </tr>
@@ -26,7 +25,6 @@ export default function RoleTable({ roles, onEdit, onDelete }: RoleTableProps) {
           {roles.length > 0 ? (
             roles.map((role) => (
               <tr key={role.id} className="border-b hover:bg-gray-50 even:bg-gray-50">
-                <td className="p-3">{role.id}</td>
                 <td className="p-3 capitalize">{role.name}</td>
                 <td className="p-3 text-center">
                   <div className="flex justify-center gap-2 flex-wrap">

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { fetchRoles, createRole, deleteRole, updateRole } from "../../services/roleService";
 import Sidebar from "../../components/layout/Sidebar";
 import RoleForm from "../../components/admin/roles/RoleForm";
 import RoleTable from "../../components/admin/roles/RoleTable";
@@ -9,14 +10,21 @@ interface Role {
   name: string;
 }
 
+
 export default function Roles() {
-  const [roles, setRoles] = useState<Role[]>([
-    { id: 1, name: "Administrador" },
-    { id: 2, name: "Editor" },
-  ]);
+  const [roles, setRoles] = useState<Role[]>([]);
   const [selectedRole, setSelectedRole] = useState<Role | undefined>(undefined);
   const [showForm, setShowForm] = useState(false);
 
+  useEffect(() => {
+    fetchRoles()
+      .then((rolesData) => setRoles(rolesData))
+      .catch((error) => {
+        console.error("Error cargando roles:", error);
+      });
+  }, []);
+
+  console.log(roles);
   const handleAdd = () => {
     setSelectedRole(undefined);
     setShowForm(true);
@@ -27,19 +35,35 @@ export default function Roles() {
     setShowForm(true);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
+  try {
+    await deleteRole(id);
     setRoles(roles.filter((r) => r.id !== id));
-  };
+  } catch (error) {
+    console.error("Error al eliminar el rol:", error);
+  }
+};
 
-  const handleSubmit = (role: Role) => {
-    if (role.id) {
-      setRoles(roles.map((r) => (r.id === role.id ? role : r)));
-    } else {
-      const newRole = { ...role, id: Date.now() };
-      setRoles([...roles, newRole]);
+
+  const handleSubmit = async (role: Role) => {
+  if (role.id) {
+    try {
+      const updatedRole = await updateRole(role.id, { name: role.name });
+      setRoles(roles.map((r) => (r.id === role.id ? updatedRole : r)));
+    } catch (error) {
+      console.error("Error al actualizar el rol:", error);
     }
-    setShowForm(false);
-  };
+  } else {
+    try {
+      const newRole = await createRole({ name: role.name });
+      setRoles([...roles, newRole]);
+    } catch (error) {
+      console.error("Error al crear el rol:", error);
+    }
+  }
+  setShowForm(false);
+};
+
 
   return (
     <div className="flex h-screen bg-gray-100">
