@@ -8,19 +8,20 @@ type Producto = {
   id: number;
   nombre: string;
   categoria: string;
+  descripcion: string;  
 };
 
 export default function ProductosPorCategoria() {
   const { categoria } = useParams<{ categoria: string }>();
 
-  const productos: Producto[] = [
-    { id: 1, nombre: "Laptop", categoria: "electronica" },
-    { id: 2, nombre: "Audífonos", categoria: "electronica" },
-    { id: 3, nombre: "Camiseta", categoria: "ropa" },
-    { id: 4, nombre: "Jeans", categoria: "ropa" },
-    { id: 5, nombre: "Silla", categoria: "hogar" },
-    { id: 6, nombre: "Mesa", categoria: "hogar" },
-  ];
+const productos: Producto[] = [
+  { id: 1, nombre: "Laptop", categoria: "electronica", descripcion: "Laptop potente para trabajo y juegos." },
+  { id: 2, nombre: "Audífonos", categoria: "electronica", descripcion: "Audífonos con cancelación de ruido." },
+  { id: 3, nombre: "Camiseta", categoria: "ropa", descripcion: "Camiseta 100% algodón." },
+  { id: 4, nombre: "Jeans", categoria: "ropa", descripcion: "Jeans de mezclilla de corte recto." },
+  { id: 5, nombre: "Silla", categoria: "hogar", descripcion: "Silla ergonómica para oficina." },
+  { id: 6, nombre: "Mesa", categoria: "hogar", descripcion: "Mesa de comedor para 4 personas." },
+];
 
   const productosFiltrados = productos.filter(
     (producto) => producto.categoria === categoria?.toLowerCase()
