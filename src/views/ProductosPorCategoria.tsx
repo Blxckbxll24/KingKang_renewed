@@ -1,30 +1,34 @@
 // src/pages/ProductosPorCategoria.tsx
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
-import ProductCard from "../components/products/ProductCard"; 
-
-type Producto = {
-  id: number;
-  nombre: string;
-  categoria: string;
-  descripcion: string;  
-};
+import ProductCard from "../components/products/ProductCard";
+import { fetchProducts } from "../services/productsService";
+import type { Products } from "../types/products";
 
 export default function ProductosPorCategoria() {
   const { categoria } = useParams<{ categoria: string }>();
+  const [productos, setProductos] = useState<Products[]>([]);
+  const [loading, setLoading] = useState(true);
 
-const productos: Producto[] = [
-  { id: 1, nombre: "Laptop", categoria: "electronica", descripcion: "Laptop potente para trabajo y juegos." },
-  { id: 2, nombre: "Audífonos", categoria: "electronica", descripcion: "Audífonos con cancelación de ruido." },
-  { id: 3, nombre: "Camiseta", categoria: "ropa", descripcion: "Camiseta 100% algodón." },
-  { id: 4, nombre: "Jeans", categoria: "ropa", descripcion: "Jeans de mezclilla de corte recto." },
-  { id: 5, nombre: "Silla", categoria: "hogar", descripcion: "Silla ergonómica para oficina." },
-  { id: 6, nombre: "Mesa", categoria: "hogar", descripcion: "Mesa de comedor para 4 personas." },
-];
+  useEffect(() => {
+    fetchProducts()
+      .then((data) => setProductos(data))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, []);
+  const categoriasMap: Record<number, string> = {
+    1: "electronica",
+    2: "ropa",
+    3: "hogar",
+    4: "mascotas",
+  };
 
   const productosFiltrados = productos.filter(
-    (producto) => producto.categoria === categoria?.toLowerCase()
+    (producto) =>
+      categoriasMap[producto.categoryId.id]?.toLowerCase() ===
+      categoria?.toLowerCase()
   );
 
   return (
@@ -36,14 +40,16 @@ const productos: Producto[] = [
           Productos de {categoria}
         </h1>
 
-        {productosFiltrados.length === 0 ? (
+        {loading ? (
+          <p className="text-center text-gray-500">Cargando productos...</p>
+        ) : productosFiltrados.length === 0 ? (
           <p className="text-center text-gray-500">
             No hay productos en esta categoría.
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 " >
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {productosFiltrados.map((item) => (
-              <ProductCard key={item.id} item={item} />
+              <ProductCard item={item} />
             ))}
           </div>
         )}

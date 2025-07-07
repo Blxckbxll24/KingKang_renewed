@@ -7,8 +7,8 @@ import Contacto from './views/Contacto';
 import Login from './views/auth/Login';
 import Registro from './views/auth/Registro';
 import Carrito from './views/Carrito';
-import Productos from './views/Productos';
-import ProductosPorCategoria from './views/ProductosPorCategoria'; // 👈 Nuevo import
+import Category from './views/CategoryKing';
+import ProductosPorCategoria from './views/ProductosPorCategoria';
 
 //Imports admin
 import Dashboard from './views/admin/Dashboard';
@@ -30,8 +30,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/carrito" element={<Carrito />} />
-        <Route path="/productos" element={<Productos />} />
-        <Route path="/productos/:categoria" element={<ProductosPorCategoria />} /> {/* 👈 Nueva ruta */}
+        <Route path="/category" element={<Category/>} />
+        <Route path="/productos/:categoria" element={<ProductosPorCategoria />} />
 
         {/* Rutas de admin */}
         <Route path="/dashboard" element={<Dashboard />} />

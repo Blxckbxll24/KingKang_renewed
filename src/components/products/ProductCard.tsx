@@ -1,27 +1,21 @@
-type Producto = {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  imagen?: string;
-  categoria: string;
-};
+import type { Products } from "../../types/products";
 
 type Props = {
-  item: Producto;
+  item: Products;
 };
 
 const ProductCard = ({ item }: Props) => {
   const handleAddToCart = () => {
-    console.log(`Producto ${item.nombre} agregado al carrito`);
+    console.log(`Producto ${item.name} agregado al carrito`);
   };
 
   return (
-    <div className="bg-white rounded-lg  shadow-md overflow-hidden">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="h-48 bg-gray-200 flex w-65 items-center justify-center">
-        {item.imagen ? (
+        {item.imageUrl ? (
           <img
-            src={item.imagen}
-            alt={item.nombre}
+            src={item.imageUrl}
+            alt={item.name}
             className="h-full w-full object-cover"
           />
         ) : (
@@ -30,9 +24,11 @@ const ProductCard = ({ item }: Props) => {
       </div>
 
       <div className="p-6">
-        <h3 className="text-xl font-semibold mb-2">{item.nombre}</h3>
-        <p className="text-gray-600 mb-4">{item.descripcion}</p>
-
+        <h3 className="text-xl font-semibold mb-2">{item.name}</h3>
+        <p className="text-gray-600 mb-4">{item.description}</p>
+        <p className="text-red-500 font-bold mb-4">${item.price}</p>
+        <p className="text-gray-500 mb-4">{item.stock}</p>
+        <p className="text-gray-500 mb-4">{item.imageUrl}</p>
         <img
           src="/Carrito.png"
           alt="Agregar al carrito"

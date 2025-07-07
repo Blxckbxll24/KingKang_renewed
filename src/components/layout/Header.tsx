@@ -16,7 +16,7 @@ export default function Header() {
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex gap-6 text-white text-sm font-medium items-center">
-          <a href="/productos" className="hover:text-orange-300 transition">Categorias</a>
+          <a href="/category" className="hover:text-orange-300 transition">Categorias</a>
           <a href="/nosotros" className="hover:text-orange-300 transition">Nosotros</a>
           <a href="/contacto" className="hover:text-orange-300 transition">Contacto</a>
           <a href="/carrito" className="hover:opacity-80 transition" aria-label="Carrito">
