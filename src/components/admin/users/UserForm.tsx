@@ -1,115 +1,112 @@
+// components/admin/users/UserForm.tsx
 import { useState, useEffect } from "react";
-import { XCircle } from "lucide-react";
-
-interface User {
-  id?: number;
-  name: string;
-  email: string;
-  role: string;
-}
+import type { User } from "../../../types/users";
+import type { Role } from "../../../types/roles";
 
 interface Props {
-  user?: User;
-  onSubmit: (user: User) => void;
+  initialData?: User;
+  roles: Role[]; // lista de roles para el select
+  onSubmit: (data: Omit<User, "id" | "role"> & { roleId: number }) => void;
   onCancel: () => void;
 }
 
-export default function UserForm({ user, onSubmit, onCancel }: Props) {
-  const [form, setForm] = useState<User>({
-    name: "",
-    email: "",
-    role: "admin",
-  });
+export default function UserForm({ initialData, roles, onSubmit, onCancel }: Props) {
+  const [username, setUsername] = useState(initialData?.username || "");
+  const [email, setEmail] = useState(initialData?.email || "");
+  const [isActive, setIsActive] = useState(initialData?.isActive ?? true);
+  const [roleId, setRoleId] = useState(initialData?.roleId || (roles[0]?.id ?? 0));
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (user) {
-      setForm(user);
-    }
-  }, [user]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+    setUsername(initialData?.username || "");
+    setEmail(initialData?.email || "");
+    setIsActive(initialData?.isActive ?? true);
+    setRoleId(initialData?.roleId || (roles[0]?.id ?? 0));
+    setPassword("");
+  }, [initialData, roles]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name && form.email && form.role) {
-      onSubmit(form);
-    }
+    if (!username.trim()) return alert("El nombre de usuario es obligatorio");
+    if (!roleId) return alert("Selecciona un rol");
+    // Si creas o editas, puedes enviar password sólo si hay valor
+    onSubmit({ username: username.trim(), email: email.trim(), isActive, roleId, ...(password ? { password } : {}) });
   };
 
   return (
-    <div className="bg-white rounded-xl shadow p-6 mb-6">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold">
-          {user ? "Editar usuario" : "Nuevo usuario"}
-        </h3>
-        <button
-          onClick={onCancel}
-          className="text-gray-500 hover:text-red-600"
-          title="Cancelar"
-        >
-          <XCircle size={24} />
-        </button>
+    <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md max-w-md mx-auto space-y-4">
+      <h3 className="text-xl font-semibold">{initialData ? "Editar Usuario" : "Agregar Usuario"}</h3>
+
+      <div>
+        <label className="block mb-1 font-medium">Nombre de usuario</label>
+        <input
+          type="text"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          className="w-full border border-gray-300 rounded px-3 py-2"
+        />
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Nombre</label>
-          <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            className="w-full border rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200"
-            required
-          />
-        </div>
+      <div>
+        <label className="block mb-1 font-medium">Correo electrónico</label>
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          className="w-full border border-gray-300 rounded px-3 py-2"
+        />
+      </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Correo</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            className="w-full border rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200"
-            required
-          />
-        </div>
+      <div>
+        <label className="block mb-1 font-medium">Contraseña {initialData ? "(dejar vacío para no cambiar)" : ""}</label>
+        <input
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          className="w-full border border-gray-300 rounded px-3 py-2"
+        />
+      </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Rol</label>
-          <select
-            name="role"
-            value={form.role}
-            onChange={handleChange}
-            className="w-full border rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200"
-            required
-          >
-            <option value="admin">Administrador</option>
-            <option value="editor">Editor</option>
-            <option value="viewer">Visualizador</option>
-          </select>
-        </div>
+      <div>
+        <label className="block mb-1 font-medium">Rol</label>
+        <select
+          value={roleId}
+          onChange={e => setRoleId(Number(e.target.value))}
+          className="w-full border border-gray-300 rounded px-3 py-2"
+        >
+          {roles.map(role => (
+            <option key={role.id} value={role.id}>
+              {role.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-        <div className="flex justify-end gap-3 pt-2">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300"
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Guardar
-          </button>
-        </div>
-      </form>
-    </div>
+      <div className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          checked={isActive}
+          onChange={e => setIsActive(e.target.checked)}
+          id="isActive"
+        />
+        <label htmlFor="isActive" className="select-none">Activo</label>
+      </div>
+
+      <div className="flex gap-4 justify-end">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
   );
 }
