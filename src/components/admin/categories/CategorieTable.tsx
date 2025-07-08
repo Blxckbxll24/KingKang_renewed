@@ -1,14 +1,10 @@
 import { Pencil, Trash2 } from "lucide-react";
-
-interface Category {
-  id: number;
-  name: string;
-}
+import type { CategoryKing } from "../../../types/categories";
 
 interface Props {
-  categories: Category[];
-  onEdit: (category: Category) => void;
-  onDelete: (id: number) => void;
+  categories: CategoryKing[];
+  onEdit: (category: CategoryKing) => void;
+  onDelete: (id: string) => void;
 }
 
 export default function CategorieTable({ categories, onEdit, onDelete }: Props) {
@@ -17,7 +13,7 @@ export default function CategorieTable({ categories, onEdit, onDelete }: Props) 
       <table className="w-full text-left border-collapse min-w-[500px]">
         <thead className="bg-blue-100 text-blue-800">
           <tr className="border-b">
-            <th className="p-3">ID</th>
+            
             <th className="p-3">Nombre de categoría</th>
             <th className="p-3 text-center">Acciones</th>
           </tr>
@@ -26,7 +22,7 @@ export default function CategorieTable({ categories, onEdit, onDelete }: Props) 
           {categories.length > 0 ? (
             categories.map((cat) => (
               <tr key={cat.id} className="border-b hover:bg-gray-50 even:bg-gray-50">
-                <td className="p-3">{cat.id}</td>
+                
                 <td className="p-3 capitalize">{cat.name}</td>
                 <td className="p-3 text-center">
                   <div className="flex justify-center gap-2">

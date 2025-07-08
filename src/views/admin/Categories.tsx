@@ -1,71 +1,39 @@
-import { useState } from "react";
-import Sidebar from "../../components/layout/Sidebar";
-import CategorieForm from "../../components/admin/categories/CategorieForm";
+import { useEffect, useState } from "react";
+import { fetchCategories } from "../../services/categoriesService";
+import type { CategoryKing } from "../../types/categories";
 import CategorieTable from "../../components/admin/categories/CategorieTable";
-import { PlusCircle } from "lucide-react";
-
-interface Category {
-  id: number;
-  name: string;
-}
+import Sidebar from "../../components/layout/Sidebar";
 
 export default function Categories() {
-  const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "Bebidas" },
-    { id: 2, name: "Snacks" },
-  ]);
-  const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
-  const [showForm, setShowForm] = useState(false);
+  const [categories, setCategories] = useState<CategoryKing[]>([]);
 
-  const handleAdd = () => {
-    setSelectedCategory(undefined);
-    setShowForm(true);
+  useEffect(() => {
+    fetchCategories()
+      .then(setCategories)
+      .catch((err) => console.error("Error cargando categorías:", err));
+  }, []);
+
+  const handleEdit = (cat: CategoryKing) => {
+    console.log("Editar", cat);
   };
 
-  const handleEdit = (category: Category) => {
-    setSelectedCategory(category);
-    setShowForm(true);
-  };
-
-  const handleDelete = (id: number) => {
-    setCategories(categories.filter((c) => c.id !== id));
-  };
-
-  const handleSubmit = (category: Category) => {
-    if (category.id) {
-      setCategories(categories.map((c) => (c.id === category.id ? category : c)));
-    } else {
-      const newCategory = { ...category, id: Date.now() };
-      setCategories([...categories, newCategory]);
-    }
-    setShowForm(false);
+  const handleDelete = (id: string) => {
+    console.log("Eliminar", id);
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex min-h-screen">
+      
       <Sidebar />
 
-      <main className="flex-1 pt-16 px-8 overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-4xl font-bold">Gestión de Categorías</h2>
-          <button
-            onClick={handleAdd}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            <PlusCircle size={20} />
-            Agregar categoría
-          </button>
-        </div>
-
-        {showForm && (
-          <CategorieForm
-            category={selectedCategory}
-            onSubmit={handleSubmit}
-            onCancel={() => setShowForm(false)}
-          />
-        )}
-
-        <CategorieTable categories={categories} onEdit={handleEdit} onDelete={handleDelete} />
+      
+      <main className="flex-1 p-6 bg-gray-100">
+        <h1 className="text-2xl font-bold mb-4">Categorías</h1>
+        <CategorieTable
+          categories={categories}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </main>
     </div>
   );
