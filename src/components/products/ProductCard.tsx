@@ -1,7 +1,7 @@
-import type { Products } from "../../types/products";
+import type { Product } from "../../types/products";
 
 type Props = {
-  item: Products;
+  item: Product;
 };
 
 const ProductCard = ({ item }: Props) => {
@@ -11,10 +11,10 @@ const ProductCard = ({ item }: Props) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="h-48 bg-gray-200 flex w-65 items-center justify-center">
-        {item.imageUrl ? (
+      <div className="h-48 bg-gray-200 flex items-center justify-center">
+        {item.image ? (
           <img
-            src={item.imageUrl}
+            src={item.image}
             alt={item.name}
             className="h-full w-full object-cover"
           />
@@ -27,8 +27,7 @@ const ProductCard = ({ item }: Props) => {
         <h3 className="text-xl font-semibold mb-2">{item.name}</h3>
         <p className="text-gray-600 mb-4">{item.description}</p>
         <p className="text-red-500 font-bold mb-4">${item.price}</p>
-        <p className="text-gray-500 mb-4">{item.stock}</p>
-        <p className="text-gray-500 mb-4">{item.imageUrl}</p>
+
         <img
           src="/Carrito.png"
           alt="Agregar al carrito"

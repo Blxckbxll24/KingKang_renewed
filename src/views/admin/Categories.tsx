@@ -1,30 +1,28 @@
-import { useState, useEffect } from "react";
-import {
-  fetchCategories,
-  createCategory,
-  updateCategory,
-  deleteCategory,
-} from "../../services/categoriesService";
+import { useEffect, useState } from "react";
 import Sidebar from "../../components/layout/Sidebar";
 import CategorieForm from "../../components/admin/categories/CategorieForm";
 import CategorieTable from "../../components/admin/categories/CategorieTable";
 import { PlusCircle } from "lucide-react";
-
-interface Category {
-  id: number;
-  name: string;
-}
+import { useCategoriesStore } from "../../store/categoryStore";
+import type { Category } from "../../types/categories";
 
 export default function Categories() {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const {
+    categories,
+    loading,
+    error,
+    loadCategories,
+    addCategory,
+    editCategory,
+    removeCategory,
+  } = useCategoriesStore();
+
   const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    fetchCategories()
-      .then((data) => setCategories(data))
-      .catch((err) => console.error("Error cargando categorías:", err));
-  }, []);
+    loadCategories();
+  }, [loadCategories]);
 
   const handleAdd = () => {
     setSelectedCategory(undefined);
@@ -37,38 +35,14 @@ export default function Categories() {
   };
 
   const handleDelete = async (id: number) => {
-    try {
-      await deleteCategory(id);
-      setCategories(categories.filter((c) => c.id !== id));
-    } catch (error) {
-      console.error("Error eliminando categoría:", error);
-    }
+    await removeCategory(id);
   };
 
   const handleSubmit = async (name: string) => {
     if (selectedCategory?.id) {
-      // Actualizar categoría existente
-      try {
-        const updated = await updateCategory(selectedCategory.id, { name });
-        console.log("Respuesta actualización:", updated);
-        setCategories(categories.map((c) => (c.id === updated.id ? updated : c)));
-      } catch (error) {
-        console.error("Error actualizando categoría:", error);
-      }
+      await editCategory(selectedCategory.id, name);
     } else {
-      // Crear nueva categoría
-      try {
-        const newCategory = await createCategory({ name });
-        console.log("Respuesta creación:", newCategory);
-
-        // Si la respuesta es un número (id), crea el objeto
-        const newCategoryObj =
-          typeof newCategory === "number" ? { id: newCategory, name } : newCategory;
-
-        setCategories([...categories, newCategoryObj]);
-      } catch (error) {
-        console.error("Error creando categoría:", error);
-      }
+      await addCategory(name);
     }
     setShowForm(false);
     setSelectedCategory(undefined);
@@ -90,6 +64,8 @@ export default function Categories() {
           </button>
         </div>
 
+        {error && <p className="text-red-500">{error}</p>}
+
         {showForm && (
           <CategorieForm
             initialData={selectedCategory}
@@ -106,6 +82,8 @@ export default function Categories() {
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
+
+        {loading && <p className="text-center text-gray-500 mt-4">Cargando categorías...</p>}
       </main>
     </div>
   );

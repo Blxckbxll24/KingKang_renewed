@@ -1,9 +1,5 @@
 import { Pencil, Trash2 } from "lucide-react";
-
-interface Category {
-  id: number;
-  name: string;
-}
+import type { Category } from "../../../types/categories";
 
 interface CategorieTableProps {
   categories: Category[];
@@ -11,7 +7,11 @@ interface CategorieTableProps {
   onDelete: (id: number) => void;
 }
 
-export default function CategorieTable({ categories, onEdit, onDelete }: CategorieTableProps) {
+export default function CategorieTable({
+  categories,
+  onEdit,
+  onDelete,
+}: CategorieTableProps) {
   return (
     <div className="bg-white rounded-xl shadow p-4 overflow-x-auto">
       <table className="w-full text-left border-collapse min-w-[600px]">
@@ -38,7 +38,11 @@ export default function CategorieTable({ categories, onEdit, onDelete }: Categor
                     </button>
                     <button
                       onClick={() => {
-                        if (window.confirm("¿Seguro que quieres eliminar esta categoría?")) {
+                        if (
+                          window.confirm(
+                            "¿Seguro que quieres eliminar esta categoría?"
+                          )
+                        ) {
                           onDelete(category.id);
                         }
                       }}
@@ -54,7 +58,7 @@ export default function CategorieTable({ categories, onEdit, onDelete }: Categor
             ))
           ) : (
             <tr>
-              <td colSpan={3} className="p-4 text-center text-gray-500">
+              <td colSpan={2} className="p-4 text-center text-gray-500">
                 No hay categorías registradas.
               </td>
             </tr>

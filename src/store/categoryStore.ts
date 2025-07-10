@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import { fetchCategories, createCategory, updateCategory, deleteCategory } from "../services/categoriesService";
+import {
+  fetchCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from "../services/categoriesService";
 import type { Category } from "../types/categories";
 
 interface CategoriesState {
@@ -8,8 +13,8 @@ interface CategoriesState {
   error: string | null;
   loadCategories: () => Promise<void>;
   addCategory: (name: string) => Promise<void>;
-  editCategory: (id: string, name: string) => Promise<void>;
-  removeCategory: (id: string) => Promise<void>;
+  editCategory: (id: number, name: string) => Promise<void>;
+  removeCategory: (id: number) => Promise<void>;
 }
 
 export const useCategoriesStore = create<CategoriesState>((set) => ({
@@ -46,10 +51,10 @@ export const useCategoriesStore = create<CategoriesState>((set) => ({
   editCategory: async (id, name) => {
     set({ loading: true, error: null });
     try {
-      const updated = await updateCategory(Number(id), { name });
+      const updated = await updateCategory(id, { name });
       set((state) => ({
         categories: state.categories.map((cat) =>
-          cat.id === id ? updated : cat
+          cat.id === updated.id ? updated : cat
         ),
       }));
     } catch (err) {
@@ -62,7 +67,7 @@ export const useCategoriesStore = create<CategoriesState>((set) => ({
   removeCategory: async (id) => {
     set({ loading: true, error: null });
     try {
-      await deleteCategory(Number(id));
+      await deleteCategory(id);
       set((state) => ({
         categories: state.categories.filter((cat) => cat.id !== id),
       }));
