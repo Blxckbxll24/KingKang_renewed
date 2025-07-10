@@ -1,3 +1,9 @@
+interface Log {
+  id: string | number;
+  createdAt: string;
+  message: string;
+}
+
 interface LogsTableProps {
   logs: Log[];
 }

@@ -1,48 +1,43 @@
-import axios from "axios";
+import apiService from "./apiService";
+import type { Role } from "../types/roles";  
 
-const API_URL = "http://localhost:8000/roles"; 
+const BASE_PATH = "/roles";
 
-
-//GET de Roles
-export async function fetchRoles() {
+export async function fetchRoles(): Promise<Role[]> {
   try {
-    const response = await axios.get(API_URL);
-    return response.data; 
+    const response = await apiService.get<Role[]>(BASE_PATH);
+    return response.data;
   } catch (error) {
     console.error("Error fetching roles:", error);
     throw error;
   }
 }
 
-//POST de Roles
-export async function createRole(roleData: { name: string }) {
+export async function createRole(roleData: { name: string }): Promise<Role> {
   try {
-    const response = await axios.post(API_URL, roleData);
-    return response.data; 
+    const response = await apiService.post<Role>(BASE_PATH, roleData);
+    return response.data;
   } catch (error) {
-    console.error("Error creando rol:", error);
+    console.error("Error creating role:", error);
     throw error;
   }
 }
 
-//DELETE de Roles
-export async function deleteRole(id: number) {
+export async function deleteRole(id: number): Promise<void> {
   try {
-    const response = await axios.delete(`${API_URL}/${id}`);
-    return response.data;
+    await apiService.delete(`${BASE_PATH}/${id}`);
   } catch (error) {
-    console.error("Error eliminando rol:", error);
+    console.error("Error deleting role:", error);
     throw error;
   }
 }
 
-//UPDATE de Roles
-export async function updateRole(id: number, roleData: { name: string }) {
+export async function updateRole(id: number, roleData: { name: string }): Promise<Role> {
   try {
-    const response = await axios.patch(`${API_URL}/${id}`, roleData);
+    const response = await apiService.patch<Role>(`${BASE_PATH}/${id}`, roleData);
     return response.data;
   } catch (error) {
-    console.error("Error actualizando rol:", error);
+    console.error("Error updating role:", error);
     throw error;
   }
 }
