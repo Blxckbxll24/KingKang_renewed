@@ -10,7 +10,6 @@ interface Role {
   name: string;
 }
 
-
 export default function Roles() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [selectedRole, setSelectedRole] = useState<Role | undefined>(undefined);
@@ -24,7 +23,6 @@ export default function Roles() {
       });
   }, []);
 
-  console.log(roles);
   const handleAdd = () => {
     setSelectedRole(undefined);
     setShowForm(true);
@@ -36,34 +34,35 @@ export default function Roles() {
   };
 
   const handleDelete = async (id: number) => {
-  try {
-    await deleteRole(id);
-    setRoles(roles.filter((r) => r.id !== id));
-  } catch (error) {
-    console.error("Error al eliminar el rol:", error);
-  }
-};
-
-
-  const handleSubmit = async (role: Role) => {
-  if (role.id) {
     try {
-      const updatedRole = await updateRole(role.id, { name: role.name });
-      setRoles(roles.map((r) => (r.id === role.id ? updatedRole : r)));
+      await deleteRole(id);
+      setRoles(roles.filter((r) => r.id !== id));
     } catch (error) {
-      console.error("Error al actualizar el rol:", error);
+      console.error("Error al eliminar el rol:", error);
     }
-  } else {
-    try {
-      const newRole = await createRole({ name: role.name });
-      setRoles([...roles, newRole]);
-    } catch (error) {
-      console.error("Error al crear el rol:", error);
-    }
-  }
-  setShowForm(false);
-};
+  };
 
+  const handleSubmit = async (name: string) => {
+    if (selectedRole?.id) {
+      // Actualizar rol existente
+      try {
+        const updatedRole = await updateRole(selectedRole.id, { name });
+        setRoles(roles.map((r) => (r.id === selectedRole.id ? updatedRole : r)));
+      } catch (error) {
+        console.error("Error al actualizar el rol:", error);
+      }
+    } else {
+      // Crear nuevo rol
+      try {
+        const newRole = await createRole({ name });
+        setRoles([...roles, newRole]);
+      } catch (error) {
+        console.error("Error al crear el rol:", error);
+      }
+    }
+    setShowForm(false);
+    setSelectedRole(undefined);
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -83,9 +82,12 @@ export default function Roles() {
 
         {showForm && (
           <RoleForm
-            role={selectedRole}
+            roleName={selectedRole?.name}
             onSubmit={handleSubmit}
-            onCancel={() => setShowForm(false)}
+            onCancel={() => {
+              setShowForm(false);
+              setSelectedRole(undefined);
+            }}
           />
         )}
 

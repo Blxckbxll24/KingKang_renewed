@@ -1,4 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  fetchCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from "../../services/categoriesService";
 import Sidebar from "../../components/layout/Sidebar";
 import CategorieForm from "../../components/admin/categories/CategorieForm";
 import CategorieTable from "../../components/admin/categories/CategorieTable";
@@ -10,12 +16,15 @@ interface Category {
 }
 
 export default function Categories() {
-  const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "Bebidas" },
-    { id: 2, name: "Snacks" },
-  ]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
   const [showForm, setShowForm] = useState(false);
+
+  useEffect(() => {
+    fetchCategories()
+      .then((data) => setCategories(data))
+      .catch((err) => console.error("Error cargando categorías:", err));
+  }, []);
 
   const handleAdd = () => {
     setSelectedCategory(undefined);
@@ -27,18 +36,42 @@ export default function Categories() {
     setShowForm(true);
   };
 
-  const handleDelete = (id: number) => {
-    setCategories(categories.filter((c) => c.id !== id));
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteCategory(id);
+      setCategories(categories.filter((c) => c.id !== id));
+    } catch (error) {
+      console.error("Error eliminando categoría:", error);
+    }
   };
 
-  const handleSubmit = (category: Category) => {
-    if (category.id) {
-      setCategories(categories.map((c) => (c.id === category.id ? category : c)));
+  const handleSubmit = async (name: string) => {
+    if (selectedCategory?.id) {
+      // Actualizar categoría existente
+      try {
+        const updated = await updateCategory(selectedCategory.id, { name });
+        console.log("Respuesta actualización:", updated);
+        setCategories(categories.map((c) => (c.id === updated.id ? updated : c)));
+      } catch (error) {
+        console.error("Error actualizando categoría:", error);
+      }
     } else {
-      const newCategory = { ...category, id: Date.now() };
-      setCategories([...categories, newCategory]);
+      // Crear nueva categoría
+      try {
+        const newCategory = await createCategory({ name });
+        console.log("Respuesta creación:", newCategory);
+
+        // Si la respuesta es un número (id), crea el objeto
+        const newCategoryObj =
+          typeof newCategory === "number" ? { id: newCategory, name } : newCategory;
+
+        setCategories([...categories, newCategoryObj]);
+      } catch (error) {
+        console.error("Error creando categoría:", error);
+      }
     }
     setShowForm(false);
+    setSelectedCategory(undefined);
   };
 
   return (
@@ -59,13 +92,20 @@ export default function Categories() {
 
         {showForm && (
           <CategorieForm
-            category={selectedCategory}
+            initialData={selectedCategory}
             onSubmit={handleSubmit}
-            onCancel={() => setShowForm(false)}
+            onCancel={() => {
+              setShowForm(false);
+              setSelectedCategory(undefined);
+            }}
           />
         )}
 
-        <CategorieTable categories={categories} onEdit={handleEdit} onDelete={handleDelete} />
+        <CategorieTable
+          categories={categories}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </main>
     </div>
   );

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 interface Props {
   initialData?: { id: number; name: string };
-  onSubmit: (data: { id?: number; name: string }) => void;
+  onSubmit: (name: string) => void;
   onCancel: () => void;
 }
 
@@ -16,7 +16,7 @@ export default function CategorieForm({ initialData, onSubmit, onCancel }: Props
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return alert("El nombre no puede estar vacío");
-    onSubmit({ id: initialData?.id, name: name.trim() });
+    onSubmit(name.trim());
     setName("");
   };
 

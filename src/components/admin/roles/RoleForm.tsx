@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from "react";
 
-interface Role {
-  id?: number;
-  name: string;
-}
-
 interface RoleFormProps {
-  role?: Role;
-  onSubmit: (role: Role) => void;
+  roleName?: string;             // Solo el nombre del rol para el formulario
+  onSubmit: (name: string) => void; // Solo enviamos el nombre al submit
   onCancel: () => void;
 }
 
-export default function RoleForm({ role, onSubmit, onCancel }: RoleFormProps) {
-  const [name, setName] = useState(role?.name || "");
+export default function RoleForm({ roleName, onSubmit, onCancel }: RoleFormProps) {
+  const [name, setName] = useState(roleName || "");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    setName(role?.name || "");
-  }, [role]);
+    setName(roleName || "");
+  }, [roleName]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,12 +21,12 @@ export default function RoleForm({ role, onSubmit, onCancel }: RoleFormProps) {
       return;
     }
     setError("");
-    onSubmit({ id: role?.id, name: name.trim() });
+    onSubmit(name.trim());
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md mb-6 max-w-md">
-      <h3 className="text-xl font-semibold mb-4">{role ? "Editar rol" : "Agregar rol"}</h3>
+      <h3 className="text-xl font-semibold mb-4">{roleName ? "Editar rol" : "Agregar rol"}</h3>
 
       <div className="mb-4">
         <label htmlFor="name" className="block font-medium mb-1">
