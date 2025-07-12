@@ -45,6 +45,11 @@ export default function CategoryKing() {
                   <h2 className="text-2xl font-semibold mb-2 text-gray-800 text-center">
                     {cat.name}
                   </h2>
+                  <img
+                    src={cat.image}
+                    alt={cat.name}
+                    className="w-full h-40 object-cover rounded-lg mb-4"
+                    />
                   <Link
                     to={ruta}
                     className="mt-auto inline-block text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
